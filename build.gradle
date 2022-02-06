@@ -4,11 +4,6 @@ buildscript {
         hilt_version = '2.38.1'
     }
 
-    repositories {
-        google()
-        jcenter()
-    }
-
     dependencies {
         classpath "com.google.dagger:hilt-android-gradle-plugin:$hilt_version"
     }
@@ -21,4 +16,10 @@ plugins {
 
 task clean(type: Delete) {
     delete rootProject.buildDir
+}
+
+allprojects {
+    repositories {
+        google()
+    }
 }

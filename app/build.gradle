@@ -61,6 +61,7 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
+    implementation "androidx.compose.runtime:runtime-livedata:$compose_version"
 
     // Coroutines
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.0'
@@ -69,11 +70,11 @@ dependencies {
     // Retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
-    implementation "com.squareup.okhttp3:logging-interceptor:4.9.3"
-    implementation "com.squareup.retrofit2:converter-moshi:2.9.0"
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.9.3'
+    implementation 'com.squareup.retrofit2:converter-moshi:2.9.0'
     implementation 'com.squareup.moshi:moshi-kotlin:1.12.0'
-    implementation "com.squareup.moshi:moshi:1.12.0"
-    implementation "com.squareup.moshi:moshi-kotlin:1.12.0"
+    implementation 'com.squareup.moshi:moshi:1.12.0'
+    implementation 'com.squareup.moshi:moshi-kotlin:1.12.0'
 
     // Hilt
     implementation "com.google.dagger:hilt-android:$hilt_version"

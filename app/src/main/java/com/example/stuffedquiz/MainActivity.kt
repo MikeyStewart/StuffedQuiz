@@ -27,7 +27,9 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colors.background
                 ) {
                     // TODO navigate between home screen and game screen
-                    HomeScreen(viewModel = homeViewModel)
+                    HomeScreen(viewModel = homeViewModel) {
+
+                    }
                 }
             }
         }
