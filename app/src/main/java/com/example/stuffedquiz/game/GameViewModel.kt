@@ -15,7 +15,9 @@ class GameViewModel @Inject constructor(
     private val triviaRepository: TriviaRepository
 ): ViewModel() {
 
+    // TODO only expose immutable LiveData
     val questions: LiveData<List<Question>> = MutableLiveData()
+    val score: LiveData<Int> = MutableLiveData(0)
 
     fun load(
         category: Int,
@@ -28,5 +30,11 @@ class GameViewModel @Inject constructor(
                 (questions as MutableLiveData).postValue(result)
             }
         }
+    }
+
+    fun incrementScore() {
+        (score as MutableLiveData).postValue(
+            score.value!! + 1
+        )
     }
 }

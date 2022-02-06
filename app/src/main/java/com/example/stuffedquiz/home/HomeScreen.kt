@@ -27,7 +27,8 @@ fun HomeScreen(
                 .fillMaxWidth()
                 .padding(32.dp),
             text = "Stuffed Quiz",
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
+            style = MaterialTheme.typography.h3
         )
         GameSettings(
             viewModel = viewModel,
@@ -43,7 +44,8 @@ fun HomeScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(32.dp),
-            onClick = onStart
+            onClick = onStart,
+            enabled = selectedCategory != null && selectedDifficulty != null
         ) {
             Text(text = "Start")
         }
@@ -58,7 +60,6 @@ fun GameSettings(
     selectedCategory: Category?,
     selectedDifficulty: Difficulty?
 ) {
-
     Column(
         modifier = modifier,
     ) {
