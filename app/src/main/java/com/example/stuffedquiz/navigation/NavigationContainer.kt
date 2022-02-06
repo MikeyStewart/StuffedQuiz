@@ -5,13 +5,15 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.stuffedquiz.game.GameScreen
+import com.example.stuffedquiz.game.GameViewModel
 import com.example.stuffedquiz.home.HomeScreen
 import com.example.stuffedquiz.home.HomeViewModel
 
 @Composable
 fun NavigationContainer(
     navController: NavHostController,
-    homeViewModel: HomeViewModel
+    homeViewModel: HomeViewModel,
+    gameViewModel: GameViewModel
 ) {
     NavHost(navController = navController, startDestination = NavigationDestination.Home.route) {
         composable(NavigationDestination.Home.route) {
@@ -20,7 +22,7 @@ fun NavigationContainer(
                 onStart = {
                     navController.navigate(
                         NavigationDestination.Game(
-                            category = homeViewModel.selectedCategory.value?.name!!,
+                            category = homeViewModel.selectedCategory.value?.id!!,
                             difficulty = homeViewModel.selectedDifficulty.value?.name!!
                         ).build()
                     )
@@ -32,7 +34,8 @@ fun NavigationContainer(
             arguments = NavigationDestination.Game.navArgs
         ) {
             GameScreen(
-                it.arguments?.getString(NavigationDestination.Game.argCategory)!!,
+                gameViewModel,
+                it.arguments?.getInt(NavigationDestination.Game.argCategory)!!,
                 it.arguments?.getString(NavigationDestination.Game.argDifficulty)!!,
             )
         }

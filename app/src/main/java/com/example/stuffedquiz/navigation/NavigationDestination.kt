@@ -15,7 +15,7 @@ sealed class NavigationDestination(
     object Home : NavigationDestination("home")
 
     class Game(
-        val category: String,
+        val category: Int,
         val difficulty: String
     ) : NavigationDestination(route, navArgs) {
         companion object {
@@ -24,7 +24,7 @@ sealed class NavigationDestination(
             const val route = "game/{$argCategory}/{$argDifficulty}"
             val navArgs = listOf(
                 navArgument(argCategory) {
-                    type = NavType.StringType
+                    type = NavType.IntType
                 },
                 navArgument(argDifficulty) {
                     type = NavType.StringType
@@ -34,7 +34,7 @@ sealed class NavigationDestination(
 
         override fun build(): String {
             return route
-                .replace("{$argCategory}", category)
+                .replace("{$argCategory}", category.toString())
                 .replace("{$argDifficulty}", difficulty)
         }
     }

@@ -9,6 +9,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
+import com.example.stuffedquiz.game.GameViewModel
 import com.example.stuffedquiz.home.HomeViewModel
 import com.example.stuffedquiz.navigation.NavigationContainer
 import com.example.stuffedquiz.ui.theme.StuffedQuizTheme
@@ -18,6 +19,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     private val homeViewModel: HomeViewModel by viewModels()
+    private val gameViewModel: GameViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,7 +31,8 @@ class MainActivity : ComponentActivity() {
                 ) {
                     NavigationContainer(
                         navController = rememberNavController(),
-                        homeViewModel = homeViewModel
+                        homeViewModel = homeViewModel,
+                        gameViewModel = gameViewModel
                     )
                 }
             }

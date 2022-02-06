@@ -1,6 +1,7 @@
 package com.example.stuffedquiz.data
 
 import retrofit2.http.GET
+import retrofit2.http.Query
 
 /**
  * A Retrofit service for the Open Trivia API (https://opentdb.com/)
@@ -13,5 +14,10 @@ interface TriviaApiService {
     @GET("api_category.php")
     suspend fun getCategories(): CategoriesResponse
 
-    // TODO: get questions based on category and difficulty
+    @GET("api.php")
+    suspend fun getQuestions(
+        @Query("amount") amount: String,
+        @Query("category") category: String,
+        @Query("difficulty") difficulty: String
+    ): QuestionsResponse
 }
