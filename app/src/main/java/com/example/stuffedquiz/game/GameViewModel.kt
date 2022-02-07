@@ -32,7 +32,16 @@ class GameViewModel @Inject constructor(
         }
     }
 
-    fun incrementScore() {
+    fun submitAnswer(
+        question: Question,
+        selectedAnswer: String
+    ) {
+        if (question.correctAnswer == selectedAnswer) {
+            incrementScore()
+        }
+    }
+
+    private fun incrementScore() {
         (score as MutableLiveData).postValue(
             score.value!! + 1
         )

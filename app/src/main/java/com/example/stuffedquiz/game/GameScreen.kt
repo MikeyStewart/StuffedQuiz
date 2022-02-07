@@ -12,7 +12,6 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.stuffedquiz.model.Question
 import com.example.stuffedquiz.ui.common.LoadingIndicator
@@ -39,7 +38,8 @@ fun GameScreen(
     } else {
         GameScreenContent(
             questions = questions!!,
-            score = score!!
+            score = score!!,
+            viewModel = viewModel
         )
     }
 }
@@ -47,6 +47,7 @@ fun GameScreen(
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun GameScreenContent(
+    viewModel: GameViewModel,
     questions: List<Question>,
     score: Int
 ) {
@@ -77,7 +78,14 @@ fun GameScreenContent(
             count = questions.size,
             modifier = Modifier.weight(1f)
         ) { index ->
-            QuestionCard(index, questions[index])
+            val question = questions[index]
+            QuestionCard(
+                index = index,
+                question = question,
+                submitAnswer = { selectedAnswer ->
+                    viewModel.submitAnswer(question, selectedAnswer)
+                }
+            )
         }
 
         val scope = rememberCoroutineScope()
@@ -97,19 +105,4 @@ fun GameScreenContent(
             Icon(imageVector = Icons.Default.ArrowForward, contentDescription = null)
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GameScreenContentPreview() {
-    GameScreenContent(
-        listOf(
-            Question(
-                question = "What is life?",
-                correctAnswer = "42",
-                incorrectAnswers = listOf("Who knows", "24", "Magic")
-            )
-        ),
-        0
-    )
 }

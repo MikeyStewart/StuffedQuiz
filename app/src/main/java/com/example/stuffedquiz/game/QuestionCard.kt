@@ -15,7 +15,8 @@ import com.example.stuffedquiz.model.Question
 @Composable
 fun QuestionCard(
     index: Int,
-    question: Question
+    question: Question,
+    submitAnswer: (String) -> Unit
 ) {
     Column(
         modifier = Modifier.fillMaxWidth()
@@ -38,7 +39,8 @@ fun QuestionCard(
         )
         AnswerList(
             correctAnswer = question.correctAnswer,
-            allAnswers = question.incorrectAnswers.plus(question.correctAnswer).shuffled()
+            allAnswers = question.incorrectAnswers.plus(question.correctAnswer).shuffled(),
+            submitAnswer = submitAnswer
         )
     }
 }
@@ -46,7 +48,8 @@ fun QuestionCard(
 @Composable
 fun AnswerList(
     correctAnswer: String,
-    allAnswers: List<String>
+    allAnswers: List<String>,
+    submitAnswer: (String) -> Unit
 ) {
     var selectedAnswer: String? by remember {
         mutableStateOf(null)
@@ -59,7 +62,10 @@ fun AnswerList(
             if (selectedAnswer == null) {
                 DefaultAnswer(
                     text = it,
-                    onClick = { selectedAnswer = it }
+                    onClick = {
+                        selectedAnswer = it
+                        submitAnswer(it)
+                    }
                 )
             } else {
                 when {
@@ -82,6 +88,7 @@ fun QuestionCardPreview() {
             question = "What is life?",
             correctAnswer = "42",
             incorrectAnswers = listOf("Who knows", "24", "Magic")
-        )
+        ),
+        {}
     )
 }
