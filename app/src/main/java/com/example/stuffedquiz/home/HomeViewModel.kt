@@ -30,11 +30,16 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun updateSelectedCategory(category: Category) {
+    fun updateSelectedCategory(category: Category?) {
         (selectedCategory as MutableLiveData).postValue(category)
     }
 
-    fun updateSelectedDifficulty(difficulty: Difficulty) {
+    fun updateSelectedDifficulty(difficulty: Difficulty?) {
         (selectedDifficulty as MutableLiveData).postValue(difficulty)
+    }
+
+    fun resetSelections() {
+        updateSelectedCategory(null)
+        updateSelectedDifficulty(null)
     }
 }

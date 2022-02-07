@@ -25,6 +25,7 @@ class GameViewModel @Inject constructor(
         if (questions.value.isNullOrEmpty()) {
             viewModelScope.launch {
                 // TODO allow user to choose number of questions
+                // TODO handle errors
                 val result = triviaRepository.getQuestions("10", category, difficulty)
                 (questions as MutableLiveData).postValue(
                     result.map {
@@ -43,6 +44,11 @@ class GameViewModel @Inject constructor(
         (score as MutableLiveData).postValue(
             score.value!! + 1
         )
+    }
+
+    fun resetGame() {
+        (score as MutableLiveData).postValue(0)
+        (questions as MutableLiveData).postValue(emptyList())
     }
 }
 

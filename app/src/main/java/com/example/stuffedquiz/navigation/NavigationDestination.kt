@@ -14,6 +14,8 @@ sealed class NavigationDestination(
 
     object Home : NavigationDestination("home")
 
+    object Result : NavigationDestination("result")
+
     class Game(
         val category: Int,
         val difficulty: String

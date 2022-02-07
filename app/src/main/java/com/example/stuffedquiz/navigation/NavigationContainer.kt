@@ -8,6 +8,8 @@ import com.example.stuffedquiz.game.GameScreen
 import com.example.stuffedquiz.game.GameViewModel
 import com.example.stuffedquiz.home.HomeScreen
 import com.example.stuffedquiz.home.HomeViewModel
+import com.example.stuffedquiz.navigation.NavigationDestination.*
+import com.example.stuffedquiz.result.ResultScreen
 
 @Composable
 fun NavigationContainer(
@@ -15,13 +17,13 @@ fun NavigationContainer(
     homeViewModel: HomeViewModel,
     gameViewModel: GameViewModel
 ) {
-    NavHost(navController = navController, startDestination = NavigationDestination.Home.route) {
-        composable(NavigationDestination.Home.route) {
+    NavHost(navController = navController, startDestination = Home.route) {
+        composable(Home.route) {
             HomeScreen(
                 viewModel = homeViewModel,
                 onStart = {
                     navController.navigate(
-                        NavigationDestination.Game(
+                        Game(
                             category = homeViewModel.selectedCategory.value?.id!!,
                             difficulty = homeViewModel.selectedDifficulty.value?.name!!
                         ).build()
@@ -30,14 +32,32 @@ fun NavigationContainer(
             )
         }
         composable(
-            route = NavigationDestination.Game.route,
-            arguments = NavigationDestination.Game.navArgs
+            route = Game.route,
+            arguments = Game.navArgs
         ) {
             GameScreen(
-                gameViewModel,
-                it.arguments?.getInt(NavigationDestination.Game.argCategory)!!,
-                it.arguments?.getString(NavigationDestination.Game.argDifficulty)!!,
+                viewModel = gameViewModel,
+                category = it.arguments?.getInt(Game.argCategory)!!,
+                difficulty = it.arguments?.getString(Game.argDifficulty)!!,
+                onFinishClick = {
+                    navController.navigate(Result.route)
+                },
+                onQuitCLick = {
+                    navController.navigate(Home.route)
+                    homeViewModel.resetSelections()
+                    gameViewModel.resetGame()
+                }
             )
+        }
+        composable(Result.route) {
+            ResultScreen(
+                score = gameViewModel.score.value!!,
+                numberOfQuestions = gameViewModel.questions.value!!.size
+            ) {
+                navController.navigate(Home.route)
+                homeViewModel.resetSelections()
+                gameViewModel.resetGame()
+            }
         }
     }
 }

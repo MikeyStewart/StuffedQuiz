@@ -5,11 +5,8 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -25,10 +22,15 @@ import kotlinx.coroutines.launch
 fun GameScreen(
     viewModel: GameViewModel,
     category: Int,
-    difficulty: String
+    difficulty: String,
+    onQuitCLick: () -> Unit,
+    onFinishClick: () -> Unit
 ) {
     val questions by viewModel.questions.observeAsState()
     val score by viewModel.score.observeAsState()
+    var currentQuestion by remember {
+        mutableStateOf(1)
+    }
 
     LaunchedEffect(Unit) {
         viewModel.load(category, difficulty)
@@ -40,7 +42,11 @@ fun GameScreen(
         GameScreenContent(
             questions = questions!!,
             score = score!!,
-            viewModel = viewModel
+            viewModel = viewModel,
+            currentQuestion = currentQuestion,
+            goToNextQuestion = { currentQuestion += 1 },
+            onQuitClick = onQuitCLick,
+            onFinishClick = onFinishClick
         )
     }
 }
@@ -50,7 +56,11 @@ fun GameScreen(
 fun GameScreenContent(
     viewModel: GameViewModel,
     questions: List<QuestionViewState>,
-    score: Int
+    score: Int,
+    currentQuestion: Int,
+    goToNextQuestion: () -> Unit,
+    onFinishClick: () -> Unit,
+    onQuitClick: () -> Unit
 ) {
     Column(
         modifier = Modifier.fillMaxSize()
@@ -60,7 +70,7 @@ fun GameScreenContent(
         ) {
             IconButton(
                 modifier = Modifier.align(Alignment.TopStart),
-                onClick = { /*TODO quit game*/ }
+                onClick = onQuitClick
             ) {
                 Icon(
                     imageVector = Icons.Default.Close,
@@ -88,7 +98,7 @@ fun GameScreenContent(
                 index = index,
                 question = question,
                 submitAnswer = { selectedAnswer ->
-                    // TODO dumb the view down a bit
+                    // TODO dumb the view down a bit. This stuff should be handled by the VM
                     if (selectedAnswer == question.correctAnswer) {
                         viewModel.incrementScore()
                     }
@@ -102,15 +112,26 @@ fun GameScreenContent(
                 .padding(8.dp)
                 .align(Alignment.End),
             onClick = {
-                scope.launch {
-                    pagerState.animateScrollToPage(
-                        page = pagerState.currentPage + 1
-                    )
+                if (currentQuestion == questions.size) {
+                    onFinishClick()
+                } else {
+                    // TODO current question index should be stored only in one place
+                    goToNextQuestion()
+                    scope.launch {
+                        pagerState.animateScrollToPage(
+                            page = pagerState.currentPage + 1
+                        )
+                    }
                 }
             }
         ) {
-            Text(text = stringResource(R.string.next_button))
-            Icon(imageVector = Icons.Default.ArrowForward, contentDescription = null)
+            Text(
+                text = stringResource(R.string.next_button)
+            )
+            Icon(
+                imageVector = Icons.Default.ArrowForward,
+                contentDescription = null
+            )
         }
     }
 }
