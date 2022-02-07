@@ -26,6 +26,7 @@ class HomeViewModel @Inject constructor(
             (categories as MutableLiveData).postValue(
                 triviaRepository.getCategories()
             )
+            // TODO load session token
         }
     }
 

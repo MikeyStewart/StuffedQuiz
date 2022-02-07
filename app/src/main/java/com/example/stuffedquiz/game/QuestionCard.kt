@@ -7,15 +7,16 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import com.example.stuffedquiz.R
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.stuffedquiz.model.Question
 
 @Composable
 fun QuestionCard(
     index: Int,
-    question: Question,
+    question: QuestionViewState,
     submitAnswer: (String) -> Unit
 ) {
     Column(
@@ -25,7 +26,7 @@ fun QuestionCard(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(8.dp),
-            text = "Question ${index + 1}",
+            text = stringResource(id = R.string.question, index + 1),
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.caption
         )
@@ -39,7 +40,7 @@ fun QuestionCard(
         )
         AnswerList(
             correctAnswer = question.correctAnswer,
-            allAnswers = question.incorrectAnswers.plus(question.correctAnswer).shuffled(),
+            allAnswers = question.allAnswers,
             submitAnswer = submitAnswer
         )
     }
@@ -84,10 +85,10 @@ fun AnswerList(
 fun QuestionCardPreview() {
     QuestionCard(
         index = 1,
-        question = Question(
+        question = QuestionViewState(
             question = "What is life?",
             correctAnswer = "42",
-            incorrectAnswers = listOf("Who knows", "24", "Magic")
+            allAnswers = listOf("Who knows", "24", "Magic", "42")
         ),
         {}
     )

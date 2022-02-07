@@ -9,7 +9,9 @@ import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.example.stuffedquiz.R
 import com.example.stuffedquiz.model.Difficulty
 
 @Composable
@@ -22,7 +24,7 @@ fun DifficultyDropDown(
     Box {
         // TODO change to outlinedTextField to make it look noice
         Text(
-            selectedDifficulty?.name ?: "Select a difficulty...",
+            selectedDifficulty?.name ?: stringResource(R.string.select_difficulty),
             modifier = Modifier
                 .clickable(onClick = { expanded = true })
                 .fillMaxWidth()

@@ -12,8 +12,9 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.example.stuffedquiz.model.Question
+import com.example.stuffedquiz.R
 import com.example.stuffedquiz.ui.common.LoadingIndicator
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
@@ -48,7 +49,7 @@ fun GameScreen(
 @Composable
 fun GameScreenContent(
     viewModel: GameViewModel,
-    questions: List<Question>,
+    questions: List<QuestionViewState>,
     score: Int
 ) {
     Column(
@@ -61,10 +62,13 @@ fun GameScreenContent(
                 modifier = Modifier.align(Alignment.TopStart),
                 onClick = { /*TODO quit game*/ }
             ) {
-                Icon(imageVector = Icons.Default.Close, contentDescription = "Quit game")
+                Icon(
+                    imageVector = Icons.Default.Close,
+                    contentDescription = stringResource(R.string.quit_content_description)
+                )
             }
             Text(
-                text = "Score: $score/${questions.size}",
+                text = stringResource(id = R.string.score, score, questions.size),
                 modifier = Modifier
                     .padding(32.dp)
                     .align(Alignment.Center),
@@ -72,6 +76,7 @@ fun GameScreenContent(
             )
         }
 
+        // TODO disable swipe gesture
         val pagerState = rememberPagerState()
         HorizontalPager(
             state = pagerState,
@@ -83,7 +88,10 @@ fun GameScreenContent(
                 index = index,
                 question = question,
                 submitAnswer = { selectedAnswer ->
-                    viewModel.submitAnswer(question, selectedAnswer)
+                    // TODO dumb the view down a bit
+                    if (selectedAnswer == question.correctAnswer) {
+                        viewModel.incrementScore()
+                    }
                 }
             )
         }
@@ -101,7 +109,7 @@ fun GameScreenContent(
                 }
             }
         ) {
-            Text(text = "Next")
+            Text(text = stringResource(R.string.next_button))
             Icon(imageVector = Icons.Default.ArrowForward, contentDescription = null)
         }
     }

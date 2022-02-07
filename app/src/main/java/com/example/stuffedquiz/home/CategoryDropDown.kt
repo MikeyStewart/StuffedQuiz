@@ -9,7 +9,9 @@ import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.example.stuffedquiz.R
 import com.example.stuffedquiz.model.Category
 
 @Composable
@@ -23,7 +25,7 @@ fun CategoryDropDown(
     Box {
         // TODO change to outlinedTextField to make it look noice
         Text(
-            selectedCategory?.name ?: "Select a category...",
+            selectedCategory?.name ?: stringResource(R.string.select_category),
             modifier = Modifier
                 .clickable(onClick = { expanded = true })
                 .fillMaxWidth()

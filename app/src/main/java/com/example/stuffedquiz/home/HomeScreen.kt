@@ -5,8 +5,10 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.example.stuffedquiz.R
 import com.example.stuffedquiz.model.Category
 import com.example.stuffedquiz.model.Difficulty
 
@@ -26,7 +28,7 @@ fun HomeScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(32.dp),
-            text = "Stuffed Quiz",
+            text = stringResource(R.string.app_name),
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.h4
         )
@@ -47,7 +49,7 @@ fun HomeScreen(
             onClick = onStart,
             enabled = selectedCategory != null && selectedDifficulty != null
         ) {
-            Text(text = "Start")
+            Text(text = stringResource(R.string.start_button))
         }
     }
 }

@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.stuffedquiz.data.TriviaRepository
-import com.example.stuffedquiz.model.Question
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -13,10 +12,10 @@ import javax.inject.Inject
 @HiltViewModel
 class GameViewModel @Inject constructor(
     private val triviaRepository: TriviaRepository
-): ViewModel() {
+) : ViewModel() {
 
     // TODO only expose immutable LiveData
-    val questions: LiveData<List<Question>> = MutableLiveData()
+    val questions: LiveData<List<QuestionViewState>> = MutableLiveData()
     val score: LiveData<Int> = MutableLiveData(0)
 
     fun load(
@@ -27,23 +26,28 @@ class GameViewModel @Inject constructor(
             viewModelScope.launch {
                 // TODO allow user to choose number of questions
                 val result = triviaRepository.getQuestions("10", category, difficulty)
-                (questions as MutableLiveData).postValue(result)
+                (questions as MutableLiveData).postValue(
+                    result.map {
+                        QuestionViewState(
+                            question = it.question,
+                            allAnswers = it.incorrectAnswers.plus(it.correctAnswer)
+                                .shuffled(), // Randomise answers
+                            correctAnswer = it.correctAnswer
+                        )
+                    })
             }
         }
     }
 
-    fun submitAnswer(
-        question: Question,
-        selectedAnswer: String
-    ) {
-        if (question.correctAnswer == selectedAnswer) {
-            incrementScore()
-        }
-    }
-
-    private fun incrementScore() {
+    fun incrementScore() {
         (score as MutableLiveData).postValue(
             score.value!! + 1
         )
     }
 }
+
+data class QuestionViewState(
+    val question: String,
+    val allAnswers: List<String>,
+    val correctAnswer: String,
+)

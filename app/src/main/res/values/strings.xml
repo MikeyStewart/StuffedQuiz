@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">Stuffed Quiz</string>
+    <string name="next_button">Next</string>
+    <string name="quit_content_description">Quit game</string>
+    <string name="start_button">Start</string>
+    <string name="select_category">Select a category…</string>
+    <string name="select_difficulty">Select a difficulty…</string>
+    <string name="question">Question %d</string>
+    <string name="score">Score %1d/%2d</string>
 </resources>

@@ -1,7 +1,9 @@
 package com.example.stuffedquiz.data
 
+import android.text.Html
 import com.example.stuffedquiz.model.Category
 import com.example.stuffedquiz.model.Question
+import com.example.stuffedquiz.util.decodeHtml
 import java.util.*
 import javax.inject.Inject
 
@@ -27,6 +29,6 @@ class TriviaRepository @Inject constructor(
             category.toString(),
             difficulty.lowercase(Locale.getDefault())
         )
-        return response.results
+        return response.results.decodeHtml()
     }
 }
