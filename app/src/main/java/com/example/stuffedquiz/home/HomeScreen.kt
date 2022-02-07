@@ -28,7 +28,7 @@ fun HomeScreen(
                 .padding(32.dp),
             text = "Stuffed Quiz",
             textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.h3
+            style = MaterialTheme.typography.h4
         )
         GameSettings(
             viewModel = viewModel,

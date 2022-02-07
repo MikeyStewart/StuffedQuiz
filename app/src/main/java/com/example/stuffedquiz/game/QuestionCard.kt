@@ -4,9 +4,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -25,7 +24,7 @@ fun QuestionCard(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(8.dp),
-            text = "Question ${index+1}",
+            text = "Question ${index + 1}",
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.caption
         )
@@ -39,7 +38,7 @@ fun QuestionCard(
         )
         AnswerList(
             correctAnswer = question.correctAnswer,
-            incorrectAnswers = question.incorrectAnswers
+            allAnswers = question.incorrectAnswers.plus(question.correctAnswer).shuffled()
         )
     }
 }
@@ -47,23 +46,28 @@ fun QuestionCard(
 @Composable
 fun AnswerList(
     correctAnswer: String,
-    incorrectAnswers: List<String>,
-
+    allAnswers: List<String>
 ) {
-    val allAnswers = incorrectAnswers.plus(correctAnswer).shuffled()
+    var selectedAnswer: String? by remember {
+        mutableStateOf(null)
+    }
+
     Column(
         modifier = Modifier.padding(8.dp)
     ) {
         allAnswers.forEach {
-            OutlinedButton(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp),
-                onClick = {
-
+            if (selectedAnswer == null) {
+                DefaultAnswer(
+                    text = it,
+                    onClick = { selectedAnswer = it }
+                )
+            } else {
+                when {
+                    it == selectedAnswer && it == correctAnswer -> SelectedCorrectAnswer(text = it)
+                    it == selectedAnswer && it != correctAnswer -> SelectedIncorrectAnswer(text = it)
+                    it != selectedAnswer && it == correctAnswer -> UnselectedCorrectAnswer(text = it)
+                    else -> DefaultAnswer(text = it) {}
                 }
-            ) {
-                Text(text = it)
             }
         }
     }

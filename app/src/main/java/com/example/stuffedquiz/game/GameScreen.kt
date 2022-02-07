@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -17,6 +18,8 @@ import com.example.stuffedquiz.model.Question
 import com.example.stuffedquiz.ui.common.LoadingIndicator
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
+import com.google.accompanist.pager.rememberPagerState
+import kotlinx.coroutines.launch
 
 @Composable
 fun GameScreen(
@@ -67,17 +70,28 @@ fun GameScreenContent(
                 style = MaterialTheme.typography.h6
             )
         }
+
+        val pagerState = rememberPagerState()
         HorizontalPager(
+            state = pagerState,
             count = questions.size,
             modifier = Modifier.weight(1f)
         ) { index ->
             QuestionCard(index, questions[index])
         }
+
+        val scope = rememberCoroutineScope()
         TextButton(
             modifier = Modifier
                 .padding(8.dp)
                 .align(Alignment.End),
-            onClick = { /*TODO next question*/ }
+            onClick = {
+                scope.launch {
+                    pagerState.animateScrollToPage(
+                        page = pagerState.currentPage + 1
+                    )
+                }
+            }
         ) {
             Text(text = "Next")
             Icon(imageVector = Icons.Default.ArrowForward, contentDescription = null)
